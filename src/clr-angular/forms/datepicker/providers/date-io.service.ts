@@ -5,6 +5,8 @@
  */
 
 import { Injectable } from '@angular/core';
+import * as moment from 'moment';
+
 
 import {
   BIG_ENDIAN,
@@ -67,22 +69,29 @@ export class DateIOService {
 
   toLocaleDisplayFormatString(date: Date): string {
     if (date) {
-      if (isNaN(date.getTime())) {
-        return '';
+        // if (isNaN(date.getTime())) {
+        //   return '';
+        // }
+        return moment(date).format('DD-MMM-YYYY').toString();
+        // /** @type {?} */
+        // var dateNo = date.getDate();
+        // /** @type {?} */
+        // var monthNo = date.getMonth() + 1;
+        // /** @type {?} */
+        // var dateStr = dateNo > 9 ? dateNo.toString() : '0' + dateNo;
+        // /** @type {?} */
+        // var monthStr = monthNo > 9 ? monthNo.toString() : '0' + monthNo;
+        // this.delimiters[0] = "<>";
+        // this.delimiters[1] = "#";
+        // if (this.localeDisplayFormat === LITTLE_ENDIAN) {
+        //   return dateStr + this.delimiters[0] + monthStr + this.delimiters[1] + date.getFullYear();
+        // } else if (this.localeDisplayFormat === MIDDLE_ENDIAN) {
+        //   return monthStr + this.delimiters[0] + dateStr + this.delimiters[1] + date.getFullYear();
+        // } else {
+        //   return date.getFullYear() + this.delimiters[0] + monthStr + this.delimiters[1] + dateStr;
+        // }
       }
-      const dateNo: number = date.getDate();
-      const monthNo: number = date.getMonth() + 1;
-      const dateStr: string = dateNo > 9 ? dateNo.toString() : '0' + dateNo;
-      const monthStr: string = monthNo > 9 ? monthNo.toString() : '0' + monthNo;
-      if (this.localeDisplayFormat === LITTLE_ENDIAN) {
-        return dateStr + this.delimiters[0] + monthStr + this.delimiters[1] + date.getFullYear();
-      } else if (this.localeDisplayFormat === MIDDLE_ENDIAN) {
-        return monthStr + this.delimiters[0] + dateStr + this.delimiters[1] + date.getFullYear();
-      } else {
-        return date.getFullYear() + this.delimiters[0] + monthStr + this.delimiters[1] + dateStr;
-      }
-    }
-    return '';
+      return '';
   }
 
   get placeholderText(): string {
@@ -135,22 +144,27 @@ export class DateIOService {
 
   getDateValueFromDateString(date: string): Date {
     if (!date) {
-      return null;
-    }
-    const dateParts: string[] = date.match(USER_INPUT_REGEX);
-    if (!dateParts || dateParts.length !== 3) {
-      return null;
-    }
-    const [firstPart, secondPart, thirdPart] = dateParts;
-    if (this.localeDisplayFormat === LITTLE_ENDIAN) {
-      // secondPart is month && firstPart is date
-      return this.validateAndGetDate(thirdPart, secondPart, firstPart);
-    } else if (this.localeDisplayFormat === MIDDLE_ENDIAN) {
-      // firstPart is month && secondPart is date
-      return this.validateAndGetDate(thirdPart, firstPart, secondPart);
-    } else {
-      // secondPart is month && thirdPart is date
-      return this.validateAndGetDate(firstPart, secondPart, thirdPart);
-    }
+        return null;
+      }
+      /** @type {?} */
+      return moment(date, 'DD-MMM-YYYY').toDate();
+      //   var dateParts = date.match(USER_INPUT_REGEX);
+      //   if (!dateParts || dateParts.length !== 3) {
+      //     return null;
+      //   }
+      //   var _a = __read(dateParts, 3),
+      //     firstPart = _a[0],
+      //     secondPart = _a[1],
+      //     thirdPart = _a[2];
+      //   if (this.localeDisplayFormat === LITTLE_ENDIAN) {
+      //     // secondPart is month && firstPart is date
+      //     return this.validateAndGetDate(thirdPart, secondPart, firstPart);
+      //   } else if (this.localeDisplayFormat === MIDDLE_ENDIAN) {
+      //     // firstPart is month && secondPart is date
+      //     return this.validateAndGetDate(thirdPart, firstPart, secondPart);
+      //   } else {
+      //     // secondPart is month && thirdPart is date
+      //     return this.validateAndGetDate(firstPart, secondPart, thirdPart);
+      //   }
   }
 }
